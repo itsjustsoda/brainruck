@@ -5,12 +5,15 @@ use std::os;
 fn main() {
     let args = os::args();
 
-    if args.len() != 2 {
-        fail!("invalid argument");
+    if args.len() == 1 {
+        fail!("no arguments");
     }
+    
+    tokenize(parse_args(args));
+}
 
-    let path: Path = Path::new(args[1]);
-    let file: File = File::open(&path).unwrap();
+fn parse_args(args: ~[~str]) -> ~str {
+    args[1]
 }
 
 fn tokenize(text: ~str) -> Vec<Token> {
@@ -46,9 +49,17 @@ enum Token {
 
 #[test]
 fn testTokenizer() {
+    // Check the tokenizer is getting the right outputs.
     assert_eq!(tokenize("><+-.,[]".to_owned()).as_slice(),
                [Right, Left, Plus, Minus, Out, In, Jump, Loop].as_slice());
 
+    // Make sure junk is ignored.
     assert_eq!(tokenize(">a<b+c-d. ,1[2]3 ".to_owned()).as_slice(),
                [Right, Left, Plus, Minus, Out, In, Jump, Loop].as_slice());
+}
+
+#[test]
+fn testArgParser() {
+    assert_eq!(parse_args(["brainruck".to_owned(), "><+-.,[]".to_owned()].to_owned()),
+               "><+-.,[]".to_owned());
 }
