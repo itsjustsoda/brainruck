@@ -47,16 +47,6 @@ fn run(tokens: Vec<Token>) {
     data.push(0);
 
     while token_index < tokens.len() {
-        std::io::timer::sleep(10);
-        for (i, t) in tokens.iter().enumerate() {
-            if i == token_index {
-                print!("\x1b[34m{:3}\x1b[0m", t);
-            } else {
-                print!("{:3}", t);
-            }
-        }
-        print!("\n");
-
         let token = token_slice[token_index];
         match token {
             Right => {
@@ -93,6 +83,14 @@ fn run(tokens: Vec<Token>) {
                     None => {}
                 }
 
+                token_index += 1;
+            },
+
+            In => {
+                match std::io::stdin().read_byte() {
+                    Ok(b) => {*data.get_mut(pointer) = b},
+                    Err(e) => {fail!("{}", e)}
+                }
                 token_index += 1;
             },
 
@@ -138,19 +136,7 @@ fn run(tokens: Vec<Token>) {
                     None => {}
                 }
             },
-            
-            _ => {}
         }
-
-        print!("{} {} ", token, pointer);
-        for (i, d) in data.iter().enumerate() {
-            if i == pointer {
-                print!("|\x1b[31m{:3}\x1b[0m", d);
-            } else {
-                print!("|{:3}", d);
-            }
-        }
-        print!("|\n");
     }
 
     print!("\n");
