@@ -133,7 +133,7 @@ fn run(tokens: Vec<Token>) {
             Loop => {
                 match jump_stack.pop() {
                     Some(i) => {token_index = i},
-                    None => {}
+                    None => {fail!("no matching [")}
                 }
             },
         }
