@@ -1,4 +1,9 @@
-brainruck
+Brainruck
 =========
 
-Brainf*ck interpreter in Rust
+Brainf*ck interpreter in Rust.
+
+Usage
+-----
+
+brainruck 'Brainf*ck code'
